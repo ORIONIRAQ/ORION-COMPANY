@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        ORION | تطوير المواقع وإنترنت الأشياء
+    </title>
+
+    <!-- ==================================================
+         CSS
+    =================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="index.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- ==================================================
+         DYNAMIC BACKGROUND
+    =================================================== -->
+
+    <div class="dynamic-background">
+
+        <!-- Background Grid -->
+
+        <div class="background-grid"></div>
+
+
+        <!-- Background Glows -->
+
+        <div class="background-glow glow-1"></div>
+
+        <div class="background-glow glow-2"></div>
+
+
+        <!-- Background Particles -->
+
+        <div class="background-particle particle-1"></div>
+
+        <div class="background-particle particle-2"></div>
+
+        <div class="background-particle particle-3"></div>
+
+        <div class="background-particle particle-4"></div>
+
+        <div class="background-particle particle-5"></div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         SITE CONTENT
+    =================================================== -->
+
+    <div class="site-content">
+
+
+
+        <!-- ==================================================
+             HEADER
+        =================================================== -->
+
+        <header>
+
+            <div class="container header-container">
+
+
+                <!-- ==================================================
+                     SITE NAME
+                     يتم تعبئته من index.js
+                =================================================== -->
+
+                <h1 data-site-name>
+                    ORION
+                </h1>
+
+
+
+                <!-- ==================================================
+                     NAVIGATION
+                =================================================== -->
+
+                <nav>
+
+                    <a href="#home">
+                        الرئيسية
+                    </a>
+
+
+                    <a href="#web-projects">
+                        Web
+                    </a>
+
+
+                    <a href="#iot-projects">
+                        IoT
+                    </a>
+
+
+                    <a href="#contact">
+                        تواصل معنا
+                    </a>
+
+                </nav>
+
+
+            </div>
+
+        </header>
+
+
+
+        <!-- ==================================================
+             HERO / HOME
+        =================================================== -->
+
+        <section
+            id="home"
+            class="hero"
+        >
+
+            <div class="container">
+
+
+                <!-- ==================================================
+                     PROFILE IMAGE
+
+                     الصورة تأتي من:
+                     SITE_DATA.profileImage
+                =================================================== -->
+
+                <img
+                    src="images/water1.jpg"
+                    alt="ORION"
+                    class="profile-img"
+                    data-profile-image
+                >
+
+
+
+                <!-- ==================================================
+                     NAME
+
+                     الاسم يأتي من:
+                     SITE_DATA.name
+                =================================================== -->
+
+                <h2 data-user-name>
+                    ORION
+                </h2>
+
+
+
+                <!-- ==================================================
+                     INTRODUCTION
+
+                     النص يأتي من:
+                     SITE_DATA.introduction
+                =================================================== -->
+
+                <p data-introduction>
+
+                    شركة متخصصة في تطوير المواقع الإلكترونية
+                    وتصميم الأنظمة الرقمية وحلول إنترنت الأشياء IoT.
+                    نقدم حلولاً تقنية حديثة تساعد الشركات والأعمال
+                    على بناء حضور رقمي وأنظمة ذكية متطورة.
+
+                </p>
+
+
+
+                <!-- ==================================================
+                     PROJECTS BUTTON
+                =================================================== -->
+
+                <a
+                    href="#web-projects"
+                    class="btn"
+                >
+
+                    شاهد أعمالنا
+
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             WEB DEVELOPMENT PROJECTS
+             
+             ملاحظة مهمة:
+
+             المشاريع نفسها لا نضعها هنا.
+
+             index.js يقوم بإنشائها تلقائياً داخل:
+             .projects-grid
+        =================================================== -->
+
+        <section
+            id="web-projects"
+            class="projects project-section"
+        >
+
+            <div class="container">
+
+
+                <!-- ==================================================
+                     WEB SECTION HEADER
+                     
+                     البيانات تأتي من:
+                     WEB_SECTION
+                =================================================== -->
+
+                <div class="project-section-header">
+
+
+                    <!-- القسم الصغير -->
+
+                    <span
+                        class="project-section-label"
+                        data-section-label
+                    >
+
+                        WEB DEVELOPMENT
+
+                    </span>
+
+
+
+                    <!-- عنوان القسم -->
+
+                    <h2
+                        class="section-title"
+                        data-section-title
+                    >
+
+                        تصميم وتطوير المواقع الإلكترونية
+
+                    </h2>
+
+
+
+                    <!-- وصف القسم -->
+
+                    <p
+                        class="section-description"
+                        data-section-description
+                    >
+
+                        نصمم ونطور مواقع إلكترونية احترافية وعصرية
+                        للشركات والمطاعم والمتاجر والأعمال المختلفة،
+                        مع التركيز على الأداء وسهولة الاستخدام
+                        والتوافق مع جميع الأجهزة.
+
+                    </p>
+
+
+                </div>
+
+
+
+                <!-- ==================================================
+                     WEB PROJECTS GRID
+
+                     index.js سيضع المشاريع هنا تلقائياً.
+                     
+                     لا تحذف هذا العنصر.
+                =================================================== -->
+
+                <div class="projects-grid"></div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             IOT PROJECTS
+
+             المشاريع يتم إنشاؤها من index.js
+        =================================================== -->
+
+        <section
+            id="iot-projects"
+            class="projects project-section iot-section"
+        >
+
+            <div class="container">
+
+
+                <!-- ==================================================
+                     IOT SECTION HEADER
+                =================================================== -->
+
+                <div class="project-section-header">
+
+
+                    <!-- القسم الصغير -->
+
+                    <span
+                        class="project-section-label"
+                        data-section-label
+                    >
+
+                        INTERNET OF THINGS
+
+                    </span>
+
+
+
+                    <!-- عنوان القسم -->
+
+                    <h2
+                        class="section-title"
+                        data-section-title
+                    >
+
+                        حلول ومشاريع إنترنت الأشياء IoT
+
+                    </h2>
+
+
+
+                    <!-- وصف القسم -->
+
+                    <p
+                        class="section-description"
+                        data-section-description
+                    >
+
+                        نطور أنظمة ومشاريع ذكية تعتمد على الحساسات
+                        والمتحكمات والاتصال بالشبكات، مع حلول للتحكم
+                        والمراقبة والأتمتة وربط الأجهزة بالأنظمة الرقمية.
+
+                    </p>
+
+
+                </div>
+
+
+
+                <!-- ==================================================
+                     IOT PROJECTS GRID
+
+                     index.js سيضع المشاريع هنا تلقائياً.
+                =================================================== -->
+
+                <div class="projects-grid"></div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             CONTACT
+        =================================================== -->
+
+        <section
+            id="contact"
+            class="contact"
+        >
+
+            <div class="container">
+
+
+                <!-- ==================================================
+                     CONTACT TITLE
+                =================================================== -->
+
+                <h2>
+                    تواصل معنا
+                </h2>
+
+
+
+                <!-- ==================================================
+                     CONTACT DESCRIPTION
+                =================================================== -->
+
+                <p>
+
+                    إذا كنت تبحث عن موقع إلكتروني احترافي أو حل ذكي
+                    يعتمد على إنترنت الأشياء، تواصل معنا عبر البريد:
+
+                </p>
+
+
+
+                <!-- ==================================================
+                     EMAIL
+
+                     البريد يأتي من:
+                     SITE_DATA.email
+
+                     index.js يقوم بتغيير:
+                     textContent
+                     href
+                =================================================== -->
+
+                <a
+                    href="mailto:your.email@example.com"
+                    class="btn"
+                    data-email
+                >
+
+                    your.email@example.com
+
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             FOOTER
+        =================================================== -->
+
+        <footer>
+
+            <div class="container">
+
+
+                <p>
+
+                    ©
+
+                    <span id="year"></span>
+
+                    <span data-site-name>
+                        ORION
+                    </span>
+
+                    .
+
+                    جميع الحقوق محفوظة.
+
+                </p>
+
+
+            </div>
+
+        </footer>
+
+
+    </div>
+
+
+
+    <!-- ==================================================
+         JAVASCRIPT
+         
+         مهم جداً:
+         اسم الملف هو index.js
+    =================================================== -->
+
+    <script src="index.js"></script>
+
+
+</body>
+
+</html>
