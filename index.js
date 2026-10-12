@@ -17,7 +17,19 @@ const SITE_DATA = {
         "ORION شركة متخصصة في تطوير المواقع الإلكترونية وتصميم الأنظمة الرقمية وتنفيذ مشاريع وحلول إنترنت الأشياء IoT. نقدم حلولاً تقنية حديثة تجمع بين التصميم الاحترافي والأداء والكفاءة.",
     email: "mm9531837@gmail.com",
     siteName: "ORION",
-    pageTitle: "ORION | تطوير المواقع وإنترنت الأشياء"
+    pageTitle: "ORION | تطوير المواقع وإنترنت الأشياء",
+
+    /* رقم التواصل (يُستخدم لرابط الواتساب فقط ولا يظهر على الزر) */
+    phone: "07811164668",
+    whatsappMessage: "مرحباً ORION، أرغب في الاستفسار عن خدماتكم.",
+
+    /* صفحة الانستكرام */
+    instagram:
+        "https://www.instagram.com/orion__tech?xtok=MXdrbHB0d2Fic3cwMw%3D%3D&utm_source=qr",
+
+    /* الإدارة (تظهر أسفل الصفحة) */
+    managerLabel: "بإدارة",
+    managerName: "المهندس محمد اياد انور الفيخراني الخيكاني"
 };
 
 
@@ -261,8 +273,12 @@ const PROJECTS = {
 document.addEventListener("DOMContentLoaded", function () {
 
     injectStepsStyles();
+    injectContactStyles();
     applySiteData();
     applySectionData();
+    setupContactButtons();
+    setupFooterCredit();
+    setupHeaderLogo();
 
     renderProjects(PROJECTS.web, "web-projects");
     renderProjects(PROJECTS.iot, "iot-projects");
@@ -368,6 +384,113 @@ function injectStepsStyles() {
 
 
 /* =========================================================
+   9-ب. تنسيق أزرار التواصل + سطر الإدارة
+   (يُضاف تلقائياً بدون تعديل CSS)
+   ========================================================= */
+
+function injectContactStyles() {
+
+    if (document.getElementById("contact-styles")) {
+        return;
+    }
+
+    const style = document.createElement("style");
+    style.id = "contact-styles";
+
+    style.textContent = `
+
+        .contact-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            width: 100%;
+        }
+
+        .contact-actions .btn {
+            gap: 10px;
+            direction: rtl;
+            width: auto;
+            max-width: none;
+            min-width: 190px;
+        }
+
+        .contact-actions .btn svg {
+            width: 22px;
+            height: 22px;
+            flex: 0 0 auto;
+            fill: currentColor;
+        }
+
+        /* زر الواتساب */
+        .contact-actions .btn-whatsapp {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            border-color: rgba(37, 211, 102, 0.55);
+            color: #ffffff;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.22);
+        }
+
+        .contact-actions .btn-whatsapp:hover {
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.38);
+        }
+
+        /* زر الانستكرام */
+        .contact-actions .btn-instagram {
+            background: linear-gradient(135deg, #F58529, #DD2A7B 50%, #8134AF);
+            border-color: rgba(221, 42, 123, 0.55);
+            color: #ffffff;
+            box-shadow: 0 10px 30px rgba(221, 42, 123, 0.22);
+        }
+
+        .contact-actions .btn-instagram:hover {
+            box-shadow: 0 15px 40px rgba(221, 42, 123, 0.38);
+        }
+
+        /* سطر الإدارة أسفل الصفحة */
+        .footer-credit {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 0.74rem;
+            letter-spacing: 0.3px;
+            color: var(--text-muted, #7F93AA);
+            text-align: center;
+        }
+
+        .footer-credit .credit-label {
+            opacity: 0.8;
+        }
+
+        .footer-credit .credit-name {
+            color: var(--primary-light, #7DD3FC);
+            font-weight: 700;
+        }
+
+        @media (max-width: 480px) {
+            .contact-actions {
+                flex-direction: column;
+            }
+
+            .contact-actions .btn {
+                width: 100%;
+                max-width: 280px;
+                min-width: 0;
+            }
+
+            .footer-credit {
+                font-size: 0.7rem;
+                line-height: 1.8;
+            }
+        }
+
+    `;
+
+    document.head.appendChild(style);
+}
+
+
+/* =========================================================
    10. تطبيق معلومات الموقع
    ========================================================= */
 
@@ -391,11 +514,230 @@ function applySiteData() {
     document.querySelectorAll("[data-introduction]").forEach(function (el) {
         el.textContent = SITE_DATA.introduction;
     });
+}
 
-    document.querySelectorAll("[data-email]").forEach(function (el) {
-        el.textContent = SITE_DATA.email;
-        el.href = "mailto:" + SITE_DATA.email;
-    });
+
+/* =========================================================
+   10-ب. الأيقونات (SVG مدمجة - لا تحتاج مكتبات خارجية)
+   ========================================================= */
+
+const ICONS = {
+
+    email:
+        '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+        '<path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2-8 5-8-5V6l8 5 8-5v2.2z"/>' +
+        '</svg>',
+
+    whatsapp:
+        '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+        '<path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.23-.16-.48-.29z"/>' +
+        '</svg>',
+
+    instagram:
+        '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+        '<path d="M7.8 2h8.4A5.8 5.8 0 0 1 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8A5.8 5.8 0 0 1 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2zm-.2 2A3.6 3.6 0 0 0 4 7.6v8.8A3.6 3.6 0 0 0 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6A3.6 3.6 0 0 0 16.4 4H7.6zm9.65 1.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>' +
+        '</svg>'
+
+};
+
+
+/* =========================================================
+   10-ج. أزرار التواصل: البريد + الواتساب + الانستكرام
+   ========================================================= */
+
+/* تحويل الرقم العراقي المحلي (07811164668) إلى صيغة دولية لرابط الواتساب */
+function getWhatsappNumber(phone) {
+
+    let digits = String(phone).replace(/\D/g, "");
+
+    if (digits.startsWith("00")) {
+        digits = digits.slice(2);
+    }
+
+    if (digits.startsWith("0")) {
+        digits = "964" + digits.slice(1);
+    }
+
+    return digits;
+}
+
+function getWhatsappLink() {
+
+    return (
+        "https://wa.me/" +
+        getWhatsappNumber(SITE_DATA.phone) +
+        "?text=" +
+        encodeURIComponent(SITE_DATA.whatsappMessage)
+    );
+}
+
+/* يبني الأزرار الثلاثة بالكامل من البيانات، ويستبدل أي أزرار قديمة في HTML */
+function setupContactButtons() {
+
+    const container = document.querySelector("#contact .container");
+
+    if (!container) {
+        return;
+    }
+
+    /* حاوية الأزرار: نستخدم الموجودة أو ننشئ جديدة */
+    let actions = container.querySelector(".contact-actions");
+
+    if (!actions) {
+
+        actions = makeEl("div", "contact-actions");
+
+        const oldEmail = container.querySelector("[data-email]");
+
+        if (oldEmail) {
+            oldEmail.parentNode.insertBefore(actions, oldEmail);
+            oldEmail.remove();
+        } else {
+            container.appendChild(actions);
+        }
+    }
+
+    /* تفريغ الحاوية (يزيل زر الواتساب القديم الذي فيه الرقم) */
+    actions.innerHTML = "";
+
+    /* 1) زر البريد: أيقونة + كلمة "البريد الإلكتروني" */
+    const emailButton = makeEl("a", "btn");
+    emailButton.href = "mailto:" + SITE_DATA.email;
+    emailButton.title = SITE_DATA.email;
+    emailButton.setAttribute("aria-label", "راسلنا عبر البريد الإلكتروني - " + SITE_DATA.siteName);
+    emailButton.innerHTML = ICONS.email;
+    emailButton.appendChild(makeEl("span", "", "البريد الإلكتروني"));
+    actions.appendChild(emailButton);
+
+    /* 2) زر الواتساب: أيقونة + كلمة "واتساب" بدون الرقم */
+    const whatsappButton = makeEl("a", "btn btn-whatsapp");
+    whatsappButton.href = getWhatsappLink();
+    whatsappButton.target = "_blank";
+    whatsappButton.rel = "noopener noreferrer";
+    whatsappButton.setAttribute("aria-label", "تواصل معنا عبر الواتساب");
+    whatsappButton.innerHTML = ICONS.whatsapp;
+    whatsappButton.appendChild(makeEl("span", "", "واتساب"));
+    actions.appendChild(whatsappButton);
+
+    /* 3) زر الانستكرام */
+    const instagramButton = makeEl("a", "btn btn-instagram");
+    instagramButton.href = SITE_DATA.instagram;
+    instagramButton.target = "_blank";
+    instagramButton.rel = "noopener noreferrer";
+    instagramButton.setAttribute("aria-label", "تابعنا على الانستكرام");
+    instagramButton.innerHTML = ICONS.instagram;
+    instagramButton.appendChild(makeEl("span", "", "انستكرام"));
+    actions.appendChild(instagramButton);
+}
+
+
+/* =========================================================
+   10-د. سطر الإدارة أسفل الصفحة
+   ========================================================= */
+
+function setupFooterCredit() {
+
+    const footerContainer = document.querySelector("footer .container");
+
+    if (!footerContainer) {
+        return;
+    }
+
+    /* تجنب التكرار */
+    if (footerContainer.querySelector(".footer-credit")) {
+        return;
+    }
+
+    const credit = makeEl("p", "footer-credit");
+
+    credit.appendChild(makeEl("span", "credit-label", SITE_DATA.managerLabel + ": "));
+    credit.appendChild(makeEl("span", "credit-name", SITE_DATA.managerName));
+
+    footerContainer.appendChild(credit);
+}
+
+
+/* =========================================================
+   10-هـ. لوكو ORION في الهيدر (SVG بتصميم اللوكو)
+   ========================================================= */
+
+const HEADER_LOGO_SVG =
+    '<svg class="brand-logo" viewBox="0 0 430 78" role="img" aria-label="ORION" xmlns="http://www.w3.org/2000/svg">' +
+        '<defs><clipPath id="orionLogoClipN"><rect x="340" y="0" width="90" height="70"/></clipPath></defs>' +
+        '<g transform="translate(0,4)" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="butt" stroke-linejoin="miter">' +
+
+            /* O الأولى (مقطوعة من الجنبين) */
+            '<path d="M7.3 31 A31 31 0 0 1 68.7 31"/>' +
+            '<path d="M7.3 39 A31 31 0 0 0 68.7 39"/>' +
+
+            /* R */
+            '<path d="M102 4 H160 A13.5 13.5 0 0 1 160 31 H128 L186 66"/>' +
+
+            /* I */
+            '<path d="M214 0 V70"/>' +
+
+            /* O الثانية */
+            '<path d="M259.3 31 A31 31 0 0 1 320.7 31"/>' +
+            '<path d="M259.3 39 A31 31 0 0 0 320.7 39"/>' +
+
+            /* N */
+            '<g clip-path="url(#orionLogoClipN)">' +
+                '<path d="M354 24 V70"/>' +
+                '<path d="M351.7 -5 L420.3 75"/>' +
+                '<path d="M416 0 V70"/>' +
+            '</g>' +
+
+        '</g>' +
+    '</svg>';
+
+function setupHeaderLogo() {
+
+    const title = document.querySelector("header h1");
+
+    if (!title || title.querySelector(".brand-logo")) {
+        return;
+    }
+
+    /* تنسيق اللوكو */
+    if (!document.getElementById("logo-styles")) {
+
+        const style = document.createElement("style");
+        style.id = "logo-styles";
+
+        style.textContent = `
+
+            header h1 {
+                line-height: 0;
+                letter-spacing: 0;
+            }
+
+            header h1::after {
+                display: none !important;
+            }
+
+            .brand-logo {
+                display: block;
+                height: 32px;
+                width: auto;
+                color: #FFFFFF;
+                transition: filter 0.3s ease;
+            }
+
+            .brand-logo:hover {
+                filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.55));
+            }
+
+            @media (max-width: 768px) {
+                .brand-logo { height: 26px; }
+            }
+
+        `;
+
+        document.head.appendChild(style);
+    }
+
+    title.innerHTML = HEADER_LOGO_SVG;
+    title.setAttribute("aria-label", SITE_DATA.siteName);
 }
 
 

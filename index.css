@@ -24,6 +24,9 @@
     --primary-light: #7DD3FC;
     --primary-dark: #0EA5E9;
 
+    --whatsapp: #25D366;
+    --whatsapp-dark: #128C7E;
+
     --border: rgba(56, 189, 248, 0.20);
     --border-light: rgba(255, 255, 255, 0.10);
 
@@ -1052,6 +1055,87 @@ nav a:hover::after {
 
 
 /* =========================================================
+   24-B. CONTACT BUTTONS (EMAIL + WHATSAPP)
+   ========================================================= */
+
+.contact-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 14px;
+
+    width: 100%;
+}
+
+
+.contact-actions .btn {
+    gap: 10px;
+
+    direction: rtl;
+
+    width: auto;
+
+    max-width: none;
+
+    min-width: 210px;
+}
+
+
+.contact-actions .btn svg {
+    width: 22px;
+    height: 22px;
+
+    flex: 0 0 auto;
+
+    fill: currentColor;
+}
+
+
+/* زر الواتساب */
+
+.contact-actions .btn-whatsapp {
+    background:
+        linear-gradient(
+            135deg,
+            var(--whatsapp),
+            var(--whatsapp-dark)
+        );
+
+    border-color:
+        rgba(37, 211, 102, 0.55);
+
+    color: #FFFFFF;
+
+    box-shadow:
+        0 10px 30px
+        rgba(37, 211, 102, 0.22);
+}
+
+
+.contact-actions .btn-whatsapp:hover {
+    box-shadow:
+        0 15px 40px
+        rgba(37, 211, 102, 0.38);
+}
+
+
+/* رقم الهاتف داخل الزر */
+
+.contact-phone-number {
+    direction: ltr;
+
+    unicode-bidi: embed;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================================================
    25. FOOTER
    ========================================================= */
 
@@ -2066,6 +2150,26 @@ button:focus-visible {
 
         max-width:
             280px;
+    }
+
+
+    /* أزرار التواصل: عمود واحد على الشاشات الصغيرة */
+
+    .contact-actions {
+        flex-direction:
+            column;
+    }
+
+
+    .contact-actions .btn {
+        width:
+            100%;
+
+        max-width:
+            280px;
+
+        min-width:
+            0;
     }
 
 
