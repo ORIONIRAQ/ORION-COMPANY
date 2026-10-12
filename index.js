@@ -28,8 +28,8 @@ const SITE_DATA = {
         "https://www.instagram.com/orion__tech?xtok=MXdrbHB0d2Fic3cwMw%3D%3D&utm_source=qr",
 
     /* الإدارة (تظهر أسفل الصفحة) */
-    managerLabel: "بإدارة",
-    managerName: "المهندس محمد اياد انور الفيخراني الخيكاني"
+    managerLabel: "بإدارة و اشراف",
+    managerName: "المهندس محمد الفيخراني "
 };
 
 
