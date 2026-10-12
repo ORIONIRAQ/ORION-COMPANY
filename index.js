@@ -84,7 +84,7 @@ function مشروع_موقع_شركة() {
 
         technologies: ["HTML", "CSS", "JavaScript", "MySQL"],
         gallery: ["images/water2.jpg"],
-        link: "https://mohammedayad750.github.io/HK/"
+        link: "https://orioniraq.github.io/HK/"
     };
 }
 
@@ -128,7 +128,7 @@ function مشروع_متجر_الكتروني() {
 
         technologies: ["HTML", "CSS", "JavaScript", "MySQL"],
         gallery: ["images/water5.jpg"],
-        link: "https://mohammedayad750.github.io/sama-decor/"
+        link: "https://orioniraq.github.io/sama-decor/"
     };
 }
 
@@ -181,7 +181,7 @@ function مشروع_منيو_مطعم() {
 
         technologies: ["HTML", "CSS", "JavaScript"],
         gallery: ["images/water20.jpg", "images/water19.jpg"],
-        link: "https://mohammedayad750.github.io/Al-KarrarMenu/"
+        link: "https://orioniraq.github.io/Al-KarrarMenu/"
     };
 }
 
