@@ -143,7 +143,6 @@ function مشروع_موقع_شركة() {
             }
         ],
 
-        technologies: ["HTML", "CSS", "JavaScript", "MySQL"],
         gallery: ["images/water2.jpg"],
         link: "https://orioniraq.github.io/HK/"
     };
@@ -187,7 +186,6 @@ function مشروع_متجر_الكتروني() {
             }
         ],
 
-        technologies: ["HTML", "CSS", "JavaScript", "MySQL"],
         gallery: ["images/water5.jpg"],
         link: "https://orioniraq.github.io/sama-decor/"
     };
@@ -237,7 +235,6 @@ function مشروع_منيو_مطعم() {
             }
         ],
 
-        technologies: ["HTML", "CSS", "JavaScript"],
         gallery: ["images/water20.jpg", "images/water19.jpg"],
         link: "https://orioniraq.github.io/Al-KarrarMenu/"
     };
@@ -667,6 +664,40 @@ function injectExtraStyles() {
         }
 
         .modal-main-image { cursor: zoom-in; }
+
+        /* زر إغلاق نافذة التفاصيل يبقى ظاهراً دائماً أثناء التمرير */
+        .modal-close-bar {
+            position: sticky;
+            top: 0;
+            height: 0;
+            z-index: 10;
+        }
+
+        .modal-close-bar .modal-close {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+        }
+
+        /* تخفيف الحمل: أثناء فتح النافذة نوقف حركة الخلفية ونلغي التمويه الثقيل */
+        body.modal-open .background-grid,
+        body.modal-open .background-glow,
+        body.modal-open .background-particle {
+            animation-play-state: paused !important;
+        }
+
+        body.modal-open .modal-overlay {
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+
+        body.modal-open header {
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+
+        .modal-content {
+            overscroll-behavior: contain;
+        }
 
     `;
 
@@ -1225,9 +1256,11 @@ function createProjectModal(project) {
 
     if (project.gallery && project.gallery.length > 0) {
         project.gallery.forEach(function (imagePath, index) {
-            gallery.appendChild(
-                makeLazyImage(imagePath, project.name + " - صورة " + (index + 1))
-            );
+            const galleryImage = document.createElement("img");
+            galleryImage.dataset.src = imagePath;
+            galleryImage.alt = project.name + " - صورة " + (index + 1);
+            galleryImage.decoding = "async";
+            gallery.appendChild(galleryImage);
         });
     }
 
@@ -1257,7 +1290,11 @@ function createProjectModal(project) {
         body.appendChild(projectLink);
     }
 
-    modalContent.appendChild(closeButton);
+    /* شريط ثابت بارتفاع صفر: يبقي زر الإغلاق ظاهراً أثناء التمرير بدون أن يزيح المحتوى */
+    const closeBar = makeEl("div", "modal-close-bar");
+    closeBar.appendChild(closeButton);
+
+    modalContent.appendChild(closeBar);
     modalContent.appendChild(mainImage);
     modalContent.appendChild(body);
 
@@ -1373,7 +1410,33 @@ function initializeSiteFeatures() {
 
 let lastOpenerButton = null;
 
+/* تحميل صور المعرض الخاصة بنافذة معينة (مرة واحدة فقط) */
+function loadModalImages(modal) {
+
+    if (!modal) {
+        return;
+    }
+
+    modal.querySelectorAll("img[data-src]").forEach(function (image) {
+        image.src = image.dataset.src;
+        image.removeAttribute("data-src");
+    });
+}
+
 function initializeModalSystem() {
+
+    /* نبدأ تحميل الصور قبل الضغط (ماوس/لمس/تركيز) حتى تفتح النافذة بسلاسة */
+    document.querySelectorAll(".project-details-btn").forEach(function (button) {
+
+        function preload() {
+            loadModalImages(document.getElementById(button.getAttribute("data-project")));
+        }
+
+        button.addEventListener("pointerenter", preload, { once: true });
+        button.addEventListener("touchstart", preload, { once: true, passive: true });
+        button.addEventListener("focus", preload, { once: true });
+    });
+
 
     document.querySelectorAll(".project-details-btn").forEach(function (button) {
 
@@ -1449,6 +1512,8 @@ function openModal(modal) {
     if (!modal) {
         return;
     }
+
+    loadModalImages(modal);
 
     document.querySelectorAll(".project-modal").forEach(function (item) {
         item.classList.remove("active");
