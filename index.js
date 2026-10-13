@@ -1,13 +1,50 @@
 /* =========================================================
-   ORION - INDEX.JS
-   شركة متخصصة في تطوير المواقع وحلول إنترنت الأشياء IoT.
+   ORION - INDEX.JS (النسخة المحدّثة)
    كل البيانات (الاسم، الصور، المشاريع، الروابط) موجودة هنا فقط.
-   لا تحتاج لتعديل HTML عند تغيير البيانات.
    ========================================================= */
 
 
 /* =========================================================
-   1. معلومات الموقع الشخصية
+   0. عند تحديث الصفحة: الرجوع دائماً إلى البداية
+   (يمنع المتصفح من استرجاع مكان التمرير القديم)
+   ========================================================= */
+
+(function () {
+
+    if ("scrollRestoration" in history) {
+        history.scrollRestoration = "manual";
+    }
+
+    let isReload = false;
+
+    try {
+        const nav = performance.getEntriesByType("navigation")[0];
+        isReload = Boolean(nav) && nav.type === "reload";
+    } catch (error) {
+        isReload = false;
+    }
+
+    /* عند التحديث نحذف #contact أو أي قسم من الرابط حتى لا يقفز إليه */
+    if (isReload && location.hash) {
+        history.replaceState(null, "", location.pathname + location.search);
+    }
+
+    function goTop() {
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
+
+    /* إذا فتح الزائر رابط قسم مقصود (مثل #contact) من الخارج لا نتدخل */
+    if (isReload || !location.hash) {
+        goTop();
+        document.addEventListener("DOMContentLoaded", goTop);
+        window.addEventListener("load", goTop);
+    }
+
+})();
+
+
+/* =========================================================
+   1. معلومات الموقع
    ========================================================= */
 
 const SITE_DATA = {
@@ -23,13 +60,12 @@ const SITE_DATA = {
     phone: "07811164668",
     whatsappMessage: "مرحباً ORION، أرغب في الاستفسار عن خدماتكم.",
 
-    /* صفحة الانستكرام */
-    instagram:
-        "https://www.instagram.com/orion__tech?xtok=MXdrbHB0d2Fic3cwMw%3D%3D&utm_source=qr",
+    /* صفحة الانستكرام (تم حذف معاملات التتبع من الرابط) */
+    instagram: "https://www.instagram.com/orion__tech",
 
     /* الإدارة (تظهر أسفل الصفحة) */
     managerLabel: "بإدارة و اشراف",
-    managerName: "المهندس محمد الفيخراني "
+    managerName: "المهندس محمد الفيخراني"
 };
 
 
@@ -49,6 +85,31 @@ const IOT_SECTION = {
     title: "حلول ومشاريع إنترنت الأشياء IoT",
     description:
         "نطور أنظمة ومشاريع ذكية تعتمد على الحساسات والمتحكمات والاتصال بالشبكات، مع حلول للتحكم والمراقبة والأتمتة وربط الأجهزة بالأنظمة الرقمية."
+};
+
+/* قسم "من نحن" الجديد - عدّل النصوص كما تريد */
+const ABOUT_SECTION = {
+    title: "لماذا ORION؟",
+    description:
+        "نبني مواقع وأنظمة ذكية بسيطة في الاستخدام، ونبقى على تواصل مباشر معك من أول فكرة حتى التسليم.",
+    items: [
+        {
+            title: "مواقع متجاوبة",
+            text: "تعمل بشكل واضح على الموبايل والكمبيوتر والتابلت."
+        },
+        {
+            title: "منيو ومواقع بعدة لغات",
+            text: "نطور منيو إلكتروني بالعربية والإنجليزية والكوردية مع بحث سريع."
+        },
+        {
+            title: "حلول IoT",
+            text: "حساسات وتحكم وأتمتة وربط الأجهزة بالأنظمة الرقمية."
+        },
+        {
+            title: "تواصل مباشر",
+            text: "عبر الواتساب أو الاتصال، بدون خطوات معقدة."
+        }
+    ]
 };
 
 
@@ -134,7 +195,7 @@ function مشروع_متجر_الكتروني() {
 
 
 /* =========================================================
-   5. المشروع الثالث - منيو مطعم الكرار (آخر مشروع في قسم WEB)
+   5. المشروع الثالث - منيو مطعم الكرار
    ========================================================= */
 
 function مشروع_منيو_مطعم() {
@@ -142,9 +203,6 @@ function مشروع_منيو_مطعم() {
         id: "web-restaurant-menu",
         category: "Web Development",
         name: "منيو مطعم الكرار",
-
-        /* ⬅️ يفضّل وضع لقطات شاشة للمنيو بأسماء خاصة بها مثل
-           images/karrar-menu-1.jpg (water16 و water17 مستخدمة أيضاً في مشروع IoT) */
         image: "images/water19.jpg",
 
         shortDescription:
@@ -248,7 +306,6 @@ function مشروع_ري_ذكي() {
 
 /* =========================================================
    7. قائمة المشاريع
-   ⭐ لإضافة مشروع جديد: أنشئ دالة له ثم أضفها هنا.
    ========================================================= */
 
 const PROJECTS = {
@@ -274,14 +331,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     injectStepsStyles();
     injectContactStyles();
+    injectExtraStyles();
+    setupHeadMeta();
     applySiteData();
     applySectionData();
     setupContactButtons();
     setupFooterCredit();
     setupHeaderLogo();
+    setupHeroLogo();
 
     renderProjects(PROJECTS.web, "web-projects");
     renderProjects(PROJECTS.iot, "iot-projects");
+
+    setupAboutSection();
 
     updateCurrentYear();
     initializeSiteFeatures();
@@ -290,7 +352,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 /* =========================================================
-   9. تنسيق الخطوات المرقمة (يُضاف تلقائياً بدون تعديل CSS)
+   9. تنسيق الخطوات المرقمة
    ========================================================= */
 
 function injectStepsStyles() {
@@ -385,7 +447,6 @@ function injectStepsStyles() {
 
 /* =========================================================
    9-ب. تنسيق أزرار التواصل + سطر الإدارة
-   (يُضاف تلقائياً بدون تعديل CSS)
    ========================================================= */
 
 function injectContactStyles() {
@@ -423,7 +484,6 @@ function injectContactStyles() {
             fill: currentColor;
         }
 
-        /* زر الواتساب */
         .contact-actions .btn-whatsapp {
             background: linear-gradient(135deg, #25D366, #128C7E);
             border-color: rgba(37, 211, 102, 0.55);
@@ -435,7 +495,6 @@ function injectContactStyles() {
             box-shadow: 0 15px 40px rgba(37, 211, 102, 0.38);
         }
 
-        /* زر الانستكرام */
         .contact-actions .btn-instagram {
             background: linear-gradient(135deg, #F58529, #DD2A7B 50%, #8134AF);
             border-color: rgba(221, 42, 123, 0.55);
@@ -447,7 +506,6 @@ function injectContactStyles() {
             box-shadow: 0 15px 40px rgba(221, 42, 123, 0.38);
         }
 
-        /* سطر الإدارة أسفل الصفحة */
         .footer-credit {
             margin-top: 10px;
             padding-top: 10px;
@@ -458,9 +516,7 @@ function injectContactStyles() {
             text-align: center;
         }
 
-        .footer-credit .credit-label {
-            opacity: 0.8;
-        }
+        .footer-credit .credit-label { opacity: 0.8; }
 
         .footer-credit .credit-name {
             color: var(--primary-light, #7DD3FC);
@@ -468,9 +524,7 @@ function injectContactStyles() {
         }
 
         @media (max-width: 480px) {
-            .contact-actions {
-                flex-direction: column;
-            }
+            .contact-actions { flex-direction: column; }
 
             .contact-actions .btn {
                 width: 100%;
@@ -487,6 +541,173 @@ function injectContactStyles() {
     `;
 
     document.head.appendChild(style);
+}
+
+
+/* =========================================================
+   9-ج. تنسيقات إضافية: قسم "لماذا ORION" + عرض الصور المكبّرة
+   + إزاحة التمرير تحت الهيدر الثابت
+   ========================================================= */
+
+function injectExtraStyles() {
+
+    if (document.getElementById("extra-styles")) {
+        return;
+    }
+
+    const style = document.createElement("style");
+    style.id = "extra-styles";
+
+    style.textContent = `
+
+        /* حتى لا يختفي عنوان القسم تحت الهيدر عند الضغط على القائمة */
+        section[id] { scroll-margin-top: 80px; }
+
+        /* البطاقات تظهر مباشرة بدون انتظار التمرير */
+        .project-card {
+            opacity: 1;
+            transform: translateY(0);
+            transition:
+                border-color 0.3s ease,
+                box-shadow 0.3s ease,
+                transform 0.3s ease;
+        }
+
+        /* الاسم الكبير في الوسط = نفس اللوكو */
+        .hero h2.hero-title {
+            line-height: 0;
+            letter-spacing: 0;
+            text-shadow: none;
+        }
+
+        .hero-logo {
+            display: block;
+            height: clamp(48px, 11vw, 96px);
+            width: auto;
+            color: #FFFFFF;
+            filter: drop-shadow(0 0 28px rgba(56, 189, 248, 0.28));
+        }
+
+        /* قسم لماذا ORION */
+        .about {
+            padding: 110px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .about-item {
+            padding: 24px;
+            border: 1px solid var(--border-light, rgba(255, 255, 255, 0.10));
+            border-radius: var(--radius-medium, 16px);
+            background: var(--bg-card, rgba(11, 18, 32, 0.92));
+        }
+
+        .about-item h3 {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: var(--text-main, #fff);
+        }
+
+        .about-item p {
+            margin: 0;
+            font-size: 0.92rem;
+            line-height: 1.9;
+            color: var(--text-secondary, #B8C7D9);
+        }
+
+        @media (max-width: 768px) {
+            .about { padding: 85px 0; }
+        }
+
+        /* عرض الصور المكبّرة */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+
+        .lightbox.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .lightbox img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(5, 10, 20, 0.8);
+            color: #fff;
+            font-size: 1.7rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .modal-main-image { cursor: zoom-in; }
+
+    `;
+
+    document.head.appendChild(style);
+}
+
+
+/* =========================================================
+   9-د. وسوم الـ head: الوصف + لون المتصفح + الأيقونة
+   ========================================================= */
+
+function setupHeadMeta() {
+
+    if (!document.querySelector('meta[name="description"]')) {
+        const description = document.createElement("meta");
+        description.name = "description";
+        description.content = SITE_DATA.introduction;
+        document.head.appendChild(description);
+    }
+
+    if (!document.querySelector('meta[name="theme-color"]')) {
+        const theme = document.createElement("meta");
+        theme.name = "theme-color";
+        theme.content = "#050A14";
+        document.head.appendChild(theme);
+    }
+
+    if (!document.querySelector('link[rel~="icon"]')) {
+
+        const svg =
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">' +
+            '<rect width="64" height="64" rx="14" fill="#050A14"/>' +
+            '<circle cx="32" cy="32" r="16" fill="none" stroke="#38BDF8" stroke-width="7"/>' +
+            '</svg>';
+
+        const icon = document.createElement("link");
+        icon.rel = "icon";
+        icon.type = "image/svg+xml";
+        icon.href = "data:image/svg+xml," + encodeURIComponent(svg);
+        document.head.appendChild(icon);
+    }
 }
 
 
@@ -508,7 +729,7 @@ function applySiteData() {
 
     document.querySelectorAll("[data-profile-image]").forEach(function (img) {
         img.src = SITE_DATA.profileImage;
-        img.alt = "الصورة الشخصية لـ " + SITE_DATA.name;
+        img.alt = "شعار " + SITE_DATA.name;
     });
 
     document.querySelectorAll("[data-introduction]").forEach(function (el) {
@@ -518,7 +739,7 @@ function applySiteData() {
 
 
 /* =========================================================
-   10-ب. الأيقونات (SVG مدمجة - لا تحتاج مكتبات خارجية)
+   10-ب. الأيقونات (SVG مدمجة)
    ========================================================= */
 
 const ICONS = {
@@ -542,10 +763,9 @@ const ICONS = {
 
 
 /* =========================================================
-   10-ج. أزرار التواصل: البريد + الواتساب + الانستكرام
+   10-ج. أزرار التواصل
    ========================================================= */
 
-/* تحويل الرقم العراقي المحلي (07811164668) إلى صيغة دولية لرابط الواتساب */
 function getWhatsappNumber(phone) {
 
     let digits = String(phone).replace(/\D/g, "");
@@ -571,7 +791,6 @@ function getWhatsappLink() {
     );
 }
 
-/* يبني الأزرار الثلاثة بالكامل من البيانات، ويستبدل أي أزرار قديمة في HTML */
 function setupContactButtons() {
 
     const container = document.querySelector("#contact .container");
@@ -580,7 +799,6 @@ function setupContactButtons() {
         return;
     }
 
-    /* حاوية الأزرار: نستخدم الموجودة أو ننشئ جديدة */
     let actions = container.querySelector(".contact-actions");
 
     if (!actions) {
@@ -597,10 +815,9 @@ function setupContactButtons() {
         }
     }
 
-    /* تفريغ الحاوية (يزيل زر الواتساب القديم الذي فيه الرقم) */
     actions.innerHTML = "";
 
-    /* 1) زر البريد: أيقونة + كلمة "البريد الإلكتروني" */
+    /* 1) البريد */
     const emailButton = makeEl("a", "btn");
     emailButton.href = "mailto:" + SITE_DATA.email;
     emailButton.title = SITE_DATA.email;
@@ -609,7 +826,7 @@ function setupContactButtons() {
     emailButton.appendChild(makeEl("span", "", "البريد الإلكتروني"));
     actions.appendChild(emailButton);
 
-    /* 2) زر الواتساب: أيقونة + كلمة "واتساب" بدون الرقم */
+    /* 2) الواتساب */
     const whatsappButton = makeEl("a", "btn btn-whatsapp");
     whatsappButton.href = getWhatsappLink();
     whatsappButton.target = "_blank";
@@ -619,7 +836,7 @@ function setupContactButtons() {
     whatsappButton.appendChild(makeEl("span", "", "واتساب"));
     actions.appendChild(whatsappButton);
 
-    /* 3) زر الانستكرام */
+    /* 3) الانستكرام */
     const instagramButton = makeEl("a", "btn btn-instagram");
     instagramButton.href = SITE_DATA.instagram;
     instagramButton.target = "_blank";
@@ -643,7 +860,6 @@ function setupFooterCredit() {
         return;
     }
 
-    /* تجنب التكرار */
     if (footerContainer.querySelector(".footer-credit")) {
         return;
     }
@@ -658,7 +874,7 @@ function setupFooterCredit() {
 
 
 /* =========================================================
-   10-هـ. لوكو ORION في الهيدر (SVG بتصميم اللوكو)
+   10-هـ. لوكو ORION في الهيدر (أعلى اليسار على الكمبيوتر)
    ========================================================= */
 
 const HEADER_LOGO_SVG =
@@ -666,21 +882,16 @@ const HEADER_LOGO_SVG =
         '<defs><clipPath id="orionLogoClipN"><rect x="340" y="0" width="90" height="70"/></clipPath></defs>' +
         '<g transform="translate(0,4)" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="butt" stroke-linejoin="miter">' +
 
-            /* O الأولى (مقطوعة من الجنبين) */
             '<path d="M7.3 31 A31 31 0 0 1 68.7 31"/>' +
             '<path d="M7.3 39 A31 31 0 0 0 68.7 39"/>' +
 
-            /* R */
             '<path d="M102 4 H160 A13.5 13.5 0 0 1 160 31 H128 L186 66"/>' +
 
-            /* I */
             '<path d="M214 0 V70"/>' +
 
-            /* O الثانية */
             '<path d="M259.3 31 A31 31 0 0 1 320.7 31"/>' +
             '<path d="M259.3 39 A31 31 0 0 0 320.7 39"/>' +
 
-            /* N */
             '<g clip-path="url(#orionLogoClipN)">' +
                 '<path d="M354 24 V70"/>' +
                 '<path d="M351.7 -5 L420.3 75"/>' +
@@ -698,7 +909,6 @@ function setupHeaderLogo() {
         return;
     }
 
-    /* تنسيق اللوكو */
     if (!document.getElementById("logo-styles")) {
 
         const style = document.createElement("style");
@@ -727,6 +937,13 @@ function setupHeaderLogo() {
                 filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.55));
             }
 
+            /* الصفحة RTL، لذلك row-reverse يضع اللوكو على اليسار والقائمة على اليمين */
+            @media (min-width: 769px) {
+                .header-container {
+                    flex-direction: row-reverse;
+                }
+            }
+
             @media (max-width: 768px) {
                 .brand-logo { height: 26px; }
             }
@@ -737,6 +954,31 @@ function setupHeaderLogo() {
     }
 
     title.innerHTML = HEADER_LOGO_SVG;
+    title.setAttribute("aria-label", SITE_DATA.siteName);
+}
+
+
+/* =========================================================
+   10-و. الاسم الكبير في الوسط بنفس شكل اللوكو
+   ========================================================= */
+
+function getLogoSvg(className, clipId) {
+
+    return HEADER_LOGO_SVG
+        .replace('class="brand-logo"', 'class="' + className + '"')
+        .split("orionLogoClipN").join(clipId);
+}
+
+function setupHeroLogo() {
+
+    const title = document.querySelector(".hero h2");
+
+    if (!title || title.querySelector(".hero-logo")) {
+        return;
+    }
+
+    title.classList.add("hero-title");
+    title.innerHTML = getLogoSvg("hero-logo", "orionHeroClipN");
     title.setAttribute("aria-label", SITE_DATA.siteName);
 }
 
@@ -767,6 +1009,53 @@ function fillSection(sectionId, data) {
     if (label) { label.textContent = data.label; }
     if (title) { title.textContent = data.title; }
     if (description) { description.textContent = data.description; }
+}
+
+
+/* =========================================================
+   11-ب. قسم "لماذا ORION" (يُنشأ بالكامل من ABOUT_SECTION)
+   ========================================================= */
+
+function setupAboutSection() {
+
+    const contact = document.getElementById("contact");
+
+    if (!contact || document.getElementById("about")) {
+        return;
+    }
+
+    const section = makeEl("section", "about");
+    section.id = "about";
+
+    const container = makeEl("div", "container");
+
+    const header = makeEl("div", "project-section-header");
+    header.appendChild(makeEl("h2", "section-title", ABOUT_SECTION.title));
+    header.appendChild(makeEl("p", "section-description", ABOUT_SECTION.description));
+
+    const grid = makeEl("div", "about-grid");
+
+    ABOUT_SECTION.items.forEach(function (item) {
+        const card = makeEl("div", "about-item");
+        card.appendChild(makeEl("h3", "", item.title));
+        card.appendChild(makeEl("p", "", item.text));
+        grid.appendChild(card);
+    });
+
+    container.appendChild(header);
+    container.appendChild(grid);
+    section.appendChild(container);
+
+    contact.parentNode.insertBefore(section, contact);
+
+    /* رابط في القائمة قبل "تواصل معنا" */
+    const contactLink = document.querySelector('nav a[href="#contact"]');
+
+    if (contactLink && !document.querySelector('nav a[href="#about"]')) {
+        const aboutLink = makeEl("a", "", "لماذا ORION");
+        aboutLink.href = "#about";
+        contactLink.parentNode.insertBefore(aboutLink, contactLink);
+    }
 }
 
 
@@ -805,13 +1094,25 @@ function renderProjects(projects, sectionId) {
         return;
     }
 
-    /* حذف المشاريع القديمة الموجودة في HTML حتى لا تتكرر */
     grid.innerHTML = "";
 
     projects.forEach(function (project) {
         grid.appendChild(createProjectCard(project));
         document.body.appendChild(createProjectModal(project));
     });
+}
+
+
+/* تحميل الصور بكسل (lazy) حتى تفتح الصفحة أسرع على الموبايل */
+function makeLazyImage(src, alt) {
+
+    const image = document.createElement("img");
+    image.src = src;
+    image.alt = alt;
+    image.loading = "lazy";
+    image.decoding = "async";
+
+    return image;
 }
 
 
@@ -824,10 +1125,11 @@ function createProjectCard(project) {
     const article = makeEl("article", "project-card");
     article.dataset.category = project.category;
     article.dataset.projectId = project.id;
+    article.classList.add("card-visible");
 
-    const image = document.createElement("img");
-    image.src = project.image;
-    image.alt = project.name;
+    /* صور البطاقات تتحمل مباشرة (بدون lazy) حتى تظهر الأقسام فوراً */
+    const image = makeLazyImage(project.image, project.name);
+    image.loading = "eager";
 
     const content = makeEl("div", "card-content");
 
@@ -862,26 +1164,27 @@ function createProjectModal(project) {
     const modalContent = makeEl("div", "modal-content");
     modalContent.setAttribute("role", "dialog");
     modalContent.setAttribute("aria-modal", "true");
+    modalContent.setAttribute("aria-labelledby", project.id + "-title");
 
     const closeButton = makeEl("button", "modal-close");
     closeButton.type = "button";
     closeButton.setAttribute("aria-label", "إغلاق");
     closeButton.innerHTML = "&times;";
 
-    const mainImage = makeEl("img", "modal-main-image");
-    mainImage.src = project.image;
-    mainImage.alt = project.name;
+    const mainImage = makeLazyImage(project.image, project.name);
+    mainImage.className = "modal-main-image";
 
     const body = makeEl("div", "modal-body");
 
-    body.appendChild(makeEl("span", "project-category", project.category));
-    body.appendChild(makeEl("h2", "", project.name));
+    const heading = makeEl("h2", "", project.name);
+    heading.id = project.id + "-title";
 
-    /* عن المشروع */
+    body.appendChild(makeEl("span", "project-category", project.category));
+    body.appendChild(heading);
+
     addModalHeading(body, "عن المشروع");
     addModalParagraph(body, project.description);
 
-    /* آلية العمل */
     addModalHeading(
         body,
         project.category === "IoT Project" ? "آلية عمل المشروع" : "آلية العمل"
@@ -901,13 +1204,11 @@ function createProjectModal(project) {
         addGoalBox(body, "الهدف النهائي للمشروع", project.howItWorksGoal);
     }
 
-    /* المكونات */
     if (project.components && project.components.length > 0) {
         addModalHeading(body, "المكونات المستخدمة");
         addList(body, project.components);
     }
 
-    /* التقنيات */
     if (project.technologies && project.technologies.length > 0) {
         addModalHeading(body, "التقنيات المستخدمة");
         addList(body, project.technologies);
@@ -918,23 +1219,21 @@ function createProjectModal(project) {
         addList(body, project.software);
     }
 
-    /* معرض الصور */
     addModalHeading(body, "صور المشروع");
 
     const gallery = makeEl("div", "project-gallery");
 
     if (project.gallery && project.gallery.length > 0) {
         project.gallery.forEach(function (imagePath, index) {
-            const image = document.createElement("img");
-            image.src = imagePath;
-            image.alt = project.name + " - صورة " + (index + 1);
-            gallery.appendChild(image);
+            gallery.appendChild(
+                makeLazyImage(imagePath, project.name + " - صورة " + (index + 1))
+            );
         });
     }
 
     body.appendChild(gallery);
 
-    /* رابط المشروع: يظهر فقط لمشاريع Web Development */
+    /* رابط المشروع: لمشاريع Web فقط */
     if (project.category === "Web Development") {
 
         const projectLink = makeEl("a", "btn", "زيارة الموقع");
@@ -1056,6 +1355,7 @@ function updateCurrentYear() {
 function initializeSiteFeatures() {
 
     initializeModalSystem();
+    initializeLightbox();
     initializeCardAnimation();
     initializeSmoothScroll();
     initializeHeaderScroll();
@@ -1071,9 +1371,10 @@ function initializeSiteFeatures() {
    19. نظام النوافذ المنبثقة
    ========================================================= */
 
+let lastOpenerButton = null;
+
 function initializeModalSystem() {
 
-    /* فتح المشروع */
     document.querySelectorAll(".project-details-btn").forEach(function (button) {
 
         button.addEventListener("click", function () {
@@ -1091,12 +1392,12 @@ function initializeModalSystem() {
                 return;
             }
 
+            lastOpenerButton = button;
             openModal(modal);
         });
 
     });
 
-    /* الإغلاق: زر X + الخلفية */
     document.querySelectorAll(".project-modal").forEach(function (modal) {
 
         const closeButton = modal.querySelector(".modal-close");
@@ -1115,7 +1416,6 @@ function initializeModalSystem() {
             });
         }
 
-        /* منع الإغلاق عند الضغط على المحتوى */
         if (content) {
             content.addEventListener("click", function (event) {
                 event.stopPropagation();
@@ -1124,10 +1424,15 @@ function initializeModalSystem() {
 
     });
 
-    /* ESC لإغلاق النافذة */
+    /* ESC: يغلق الصورة المكبّرة أولاً، ثم النافذة */
     document.addEventListener("keydown", function (event) {
 
         if (event.key !== "Escape") {
+            return;
+        }
+
+        if (isLightboxOpen()) {
+            closeLightbox();
             return;
         }
 
@@ -1145,7 +1450,6 @@ function openModal(modal) {
         return;
     }
 
-    /* إغلاق أي نافذة أخرى */
     document.querySelectorAll(".project-modal").forEach(function (item) {
         item.classList.remove("active");
         item.setAttribute("aria-hidden", "true");
@@ -1154,17 +1458,14 @@ function openModal(modal) {
     modal.classList.add("active");
     modal.setAttribute("aria-hidden", "false");
 
-    /* منع تمرير الصفحة */
     document.body.classList.add("modal-open");
 
-    /* إعادة المحتوى إلى الأعلى */
     const modalContent = modal.querySelector(".modal-content");
 
     if (modalContent) {
         modalContent.scrollTop = 0;
     }
 
-    /* التركيز على زر الإغلاق */
     const closeButton = modal.querySelector(".modal-close");
 
     if (closeButton) {
@@ -1185,7 +1486,84 @@ function closeModal(modal) {
 
     if (!document.querySelector(".project-modal.active")) {
         document.body.classList.remove("modal-open");
+
+        /* إرجاع التركيز لزر "عرض التفاصيل" الذي فتح النافذة */
+        if (lastOpenerButton) {
+            lastOpenerButton.focus();
+            lastOpenerButton = null;
+        }
     }
+}
+
+
+/* =========================================================
+   19-ب. عرض الصور بحجم كبير (Lightbox)
+   ========================================================= */
+
+let lightboxElement = null;
+let lightboxImage = null;
+
+function initializeLightbox() {
+
+    lightboxElement = makeEl("div", "lightbox");
+    lightboxElement.setAttribute("aria-hidden", "true");
+
+    const closeButton = makeEl("button", "lightbox-close");
+    closeButton.type = "button";
+    closeButton.setAttribute("aria-label", "إغلاق الصورة");
+    closeButton.innerHTML = "&times;";
+
+    lightboxImage = document.createElement("img");
+    lightboxImage.alt = "";
+
+    lightboxElement.appendChild(closeButton);
+    lightboxElement.appendChild(lightboxImage);
+    document.body.appendChild(lightboxElement);
+
+    closeButton.addEventListener("click", closeLightbox);
+
+    lightboxElement.addEventListener("click", function (event) {
+        if (event.target !== lightboxImage) {
+            closeLightbox();
+        }
+    });
+
+    /* الضغط على أي صورة في المعرض أو الصورة الرئيسية للنافذة */
+    document.addEventListener("click", function (event) {
+
+        const image = event.target.closest(".project-gallery img, .modal-main-image");
+
+        if (image) {
+            openLightbox(image.src, image.alt);
+        }
+    });
+}
+
+function openLightbox(src, alt) {
+
+    if (!lightboxElement) {
+        return;
+    }
+
+    lightboxImage.src = src;
+    lightboxImage.alt = alt || "";
+
+    lightboxElement.classList.add("active");
+    lightboxElement.setAttribute("aria-hidden", "false");
+}
+
+function closeLightbox() {
+
+    if (!lightboxElement) {
+        return;
+    }
+
+    lightboxElement.classList.remove("active");
+    lightboxElement.setAttribute("aria-hidden", "true");
+}
+
+function isLightboxOpen() {
+    return Boolean(lightboxElement && lightboxElement.classList.contains("active"));
 }
 
 
@@ -1195,34 +1573,10 @@ function closeModal(modal) {
 
 function initializeCardAnimation() {
 
-    const projectCards = document.querySelectorAll(".project-card");
-
-    if ("IntersectionObserver" in window) {
-
-        const cardObserver = new IntersectionObserver(function (entries, observer) {
-
-            entries.forEach(function (entry) {
-
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("card-visible");
-                    observer.unobserve(entry.target);
-                }
-
-            });
-
-        }, { threshold: 0.15 });
-
-        projectCards.forEach(function (card) {
-            cardObserver.observe(card);
-        });
-
-    } else {
-
-        projectCards.forEach(function (card) {
-            card.classList.add("card-visible");
-        });
-
-    }
+    /* لا توجد حركة انتظار: كل البطاقات ظاهرة من البداية */
+    document.querySelectorAll(".project-card").forEach(function (card) {
+        card.classList.add("card-visible");
+    });
 }
 
 
@@ -1297,6 +1651,11 @@ function initializeHeaderScroll() {
 function initializeImageErrorHandling() {
 
     document.querySelectorAll("img").forEach(function (image) {
+
+        /* إذا فشلت الصورة قبل إضافة المراقب */
+        if (image.complete && image.naturalWidth === 0 && image.getAttribute("src")) {
+            image.classList.add("image-error");
+        }
 
         image.addEventListener("error", function () {
             image.classList.add("image-error");
